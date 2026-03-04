@@ -23,8 +23,8 @@ export class User {
   forceLogout: boolean;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @CreateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
 }
