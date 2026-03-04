@@ -37,6 +37,8 @@ export class UserService {
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
+
+    return user;
   }
 
   async create(dto: CreateUserDto) {
@@ -95,6 +97,13 @@ export class UserService {
     user.forceLogout = true;
 
     return this.save(user);
+  }
+
+  async remove(id: string) {
+    const user = await this.userRepository.findOneByOrFail({ id });
+    await this.userRepository.delete({ id });
+
+    return user;
   }
 
   save(user: User) {
