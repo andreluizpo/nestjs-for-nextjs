@@ -68,7 +68,7 @@ export class UserService {
       throw new BadRequestException('Dados não enviados');
     }
 
-    const user = await this.userRepository.findOneByOrFail({ id });
+    const user = await this.findOneByOrFail({ id });
 
     user.name = dto.name ?? user.name;
 
@@ -82,14 +82,14 @@ export class UserService {
   }
 
   async updatePassword(id: string, dto: UpdatePasswordDto) {
-    const user = await this.userRepository.findOneByOrFail({ id });
+    const user = await this.findOneByOrFail({ id });
 
-    const isCurrentPassword = await this.hashingService.compare(
+    const isCurrentPasswordValid = await this.hashingService.compare(
       dto.currentPassword,
       user.password,
     );
 
-    if (!isCurrentPassword) {
+    if (!isCurrentPasswordValid) {
       throw new UnauthorizedException('Senha atual inválida');
     }
 
@@ -100,9 +100,8 @@ export class UserService {
   }
 
   async remove(id: string) {
-    const user = await this.userRepository.findOneByOrFail({ id });
+    const user = await this.findOneByOrFail({ id });
     await this.userRepository.delete({ id });
-
     return user;
   }
 
